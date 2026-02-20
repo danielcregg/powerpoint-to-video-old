@@ -1,146 +1,121 @@
-# PowerPoint to Video - Full Stack Application
+# PowerPoint to Video Converter (Legacy)
 
-A beautiful, professional web application for converting PowerPoint presentations to narrated videos using AI.
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
+![FFmpeg](https://img.shields.io/badge/FFmpeg-007808?style=flat-square&logo=ffmpeg&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)
 
-## New Architecture (React + Python)
+A full-stack web application that converts PowerPoint presentations into narrated videos using AI-powered script generation and text-to-speech synthesis.
 
-### Frontend (React + TypeScript + Tailwind CSS)
-- **Beautiful drag-and-drop interface** for file uploads
+## Overview
+
+This application accepts a `.pptx` file, uses Google Gemini to generate a natural presenter script for each slide, synthesizes speech with Coqui TTS, and assembles the final narrated video using MoviePy and FFmpeg. It includes both a modern React web interface and a standalone command-line tool.
+
+## Features
+
+- **AI-powered script generation** using Google Gemini vision models
+- **High-quality text-to-speech** synthesis via Coqui TTS (offline, no API fees)
+- **Drag-and-drop web interface** built with React, TypeScript, and Tailwind CSS
 - **Real-time progress tracking** with detailed status updates
-- **Script editing interface** for customizing narration
-- **Professional, responsive design** optimized for all devices
-- **Download management** with preview capabilities
-
-### Backend (Python + FastAPI)
-- **RESTful API** built with FastAPI
-- **Background processing** for video conversion
-- **Real-time status updates** via polling
-- **Script management** with regeneration capabilities
-- **File handling** with proper validation and cleanup
-
-### Key Features
-- **AI-powered script generation** using Google Gemini
-- **High-quality text-to-speech** using Coqui TTS  
-- **Cross-platform PowerPoint conversion** using LibreOffice
-- **Professional video output** with multiple codec fallbacks
 - **Script editing and regeneration** without full reprocessing
 - **Multi-job management** with persistent state
+- **Cross-platform slide conversion** using LibreOffice headless mode
+- **Multiple video codec fallbacks** (H.264, MP4V) for broad compatibility
+- **CLI support** via the standalone `auto_presenter.py` script
 
-## Quick Start
+## Prerequisites
 
-### GitHub Codespaces (Recommended)
-1. Create a new Codespace from this repository
-2. Wait for the devcontainer to initialize (installs Node.js, Python, LibreOffice, FFmpeg)
-3. Set up your Gemini API key:
+- Python 3.11 or higher
+- Node.js 18 or higher
+- LibreOffice (headless mode for PPTX-to-PDF conversion)
+- FFmpeg (video encoding)
+- A Google Gemini API key
+
+## Getting Started
+
+### Installation
+
+**GitHub Codespaces (Recommended):**
+
+1. Create a new Codespace from this repository. The devcontainer will automatically install all dependencies.
+2. Set up your Gemini API key:
    ```bash
    echo "GEMINI_API_KEY=your_api_key_here" > .env
    ```
-4. Start the backend:
+3. Run the startup script:
    ```bash
-   cd backend
-   python app.py
+   bash start-dev.sh
    ```
-5. Start the frontend (in a new terminal):
+
+**Local Development:**
+
+1. Clone the repository:
    ```bash
-   cd frontend
-   npm run dev
+   git clone https://github.com/danielcregg/powerpoint-to-video-old.git
+   cd powerpoint-to-video-old
    ```
-6. Open http://localhost:3000 in your browser
 
-### Local Development
-1. **Prerequisites:**
-   - Python 3.11+
-   - Node.js 18+
-   - LibreOffice
-   - FFmpeg
-
-2. **Backend Setup:**
+2. Install backend dependencies:
    ```bash
    cd backend
    pip install -r requirements.txt
-   echo "GEMINI_API_KEY=your_api_key_here" > .env
-   python app.py
+   echo "GEMINI_API_KEY=your_api_key_here" > ../.env
    ```
 
-3. **Frontend Setup:**
+3. Install frontend dependencies:
    ```bash
-   cd frontend
+   cd ../frontend
    npm install
-   npm run dev
    ```
 
-## API Endpoints
+### Usage
 
-### Core Endpoints
-- `POST /upload` - Upload PowerPoint file and start conversion
-- `GET /status/{job_id}` - Get conversion progress and status
-- `GET /download/{job_id}` - Download completed video
-- `GET /scripts/{job_id}` - Get generated scripts for editing
-- `PUT /scripts/{job_id}` - Update scripts and regenerate audio
+**Web Interface:**
 
-### Management Endpoints
-- `GET /jobs` - List all conversion jobs
-- `GET /slides/{job_id}/{slide_num}` - Get slide image for preview
-- `GET /health` - Check service availability
+1. Start the backend:
+   ```bash
+   cd backend && python app.py
+   ```
+2. Start the frontend (in a new terminal):
+   ```bash
+   cd frontend && npm run dev
+   ```
+3. Open `http://localhost:3000` in your browser and upload a `.pptx` file.
 
-## Technology Stack
-
-### Frontend
-- **React 18** with TypeScript
-- **Tailwind CSS** for styling
-- **TanStack Query** for API state management
-- **Lucide React** for icons
-- **React Dropzone** for file uploads
-- **Vite** for fast development
-
-### Backend
-- **FastAPI** for the REST API
-- **Uvicorn** for ASGI server
-- **Pydantic** for data validation
-- **Google Generative AI** (Gemini) for script generation
-- **Coqui TTS** for text-to-speech synthesis
-- **MoviePy** for video assembly
-- **PyMuPDF** for PDF processing
-
-### Infrastructure
-- **LibreOffice** for PowerPoint conversion
-- **FFmpeg** for video encoding
-- **GitHub Codespaces** for development environment
-
-## Development Workflow
-
-1. **Upload a presentation** via the drag-and-drop interface
-2. **Monitor progress** in real-time with detailed status updates
-3. **Edit scripts** once conversion is complete
-4. **Regenerate audio** for modified scripts only
-5. **Download the final video** with custom narration
-
-## Project Structure
-
-```
-powerpoint-to-video/
-├── frontend/                 # React application
-│   ├── src/
-│   │   ├── components/      # UI components
-│   │   ├── api.ts          # API client
-│   │   └── App.tsx         # Main application
-│   ├── package.json
-│   └── tailwind.config.js
-├── backend/                 # FastAPI application
-│   ├── app.py              # Main API server
-│   └── requirements.txt    # Python dependencies
-├── auto_presenter.py       # Original CLI script (preserved)
-├── requirements.txt        # Legacy requirements
-└── .devcontainer/          # Codespaces configuration
-    └── devcontainer.json
-```
-
-## Legacy CLI Support
-
-The original command-line interface is still available:
+**Command-Line Interface:**
 
 ```bash
 python auto_presenter.py presentation.pptx
 ```
 
-This provides backward compatibility while the new web interface offers enhanced features and usability.
+**API Endpoints:**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/upload` | Upload a PowerPoint file and start conversion |
+| `GET` | `/status/{job_id}` | Get conversion progress and status |
+| `GET` | `/download/{job_id}` | Download completed video |
+| `GET` | `/scripts/{job_id}` | Get generated scripts for editing |
+| `PUT` | `/scripts/{job_id}` | Update scripts and regenerate audio |
+| `GET` | `/jobs` | List all conversion jobs |
+| `GET` | `/health` | Check service availability |
+
+## Tech Stack
+
+- **Python** -- Backend logic and AI orchestration
+- **FastAPI** -- REST API framework with async support
+- **React 18** -- Frontend UI with TypeScript
+- **Tailwind CSS** -- Utility-first styling
+- **Google Gemini** -- AI vision model for slide script generation
+- **Coqui TTS** -- Offline text-to-speech synthesis
+- **MoviePy** -- Video assembly from images and audio
+- **PyMuPDF** -- PDF-to-image extraction
+- **LibreOffice** -- Headless PPTX-to-PDF conversion
+- **FFmpeg** -- Video encoding and processing
+- **Vite** -- Frontend build tooling
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
