@@ -77,7 +77,7 @@ class SlideScript(BaseModel):
 
 # Initialize AI services on startup
 @app.on_event("startup")
-async def startup_event():
+async def startup_event():  # noqa: deprecation - lifespan events preferred for newer FastAPI
     global vision_model, tts_engine
     
     print("Initializing AI services...")

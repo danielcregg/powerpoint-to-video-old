@@ -279,7 +279,7 @@ def create_video_with_moviepy(image_files, audio_files, output_path):
             try:
                 os.remove(output_path)
                 print(f"  - Removed failed video file: {output_path}")
-            except:
+            except OSError:
                 pass
         
         print("  - Trying alternative H.264 method...")
@@ -304,9 +304,9 @@ def create_video_with_moviepy(image_files, audio_files, output_path):
                 try:
                     os.remove(output_path)
                     print(f"  - Removed failed video file: {output_path}")
-                except:
+                except OSError:
                     pass
-            
+
             # Final fallback to MP4V - still use original filename
             try:
                 final_video.write_videofile(
